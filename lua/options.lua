@@ -3,6 +3,7 @@ local utils = require("utils")
 local fn = vim.fn
 local opt = vim.opt
 local o = vim.o
+local a = vim.api
 
 -- Change fillchars for folding, vertical split, end of buffer, and message separator
 opt.fillchars = {
@@ -15,6 +16,11 @@ opt.fillchars = {
   msgsep = "‾",
   diff = "╱",
 }
+
+-- Cursor Visibility
+o.cursorline = true
+o.cursorlineopt = "screenline"
+o.cursorcolumn = true
 
 -- Split window below/right when creating horizontal/vertical windows
 opt.splitbelow = true
