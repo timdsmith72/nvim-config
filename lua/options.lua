@@ -92,6 +92,10 @@ opt.tabstop = 2 -- Number of visual spaces per TAB
 opt.softtabstop = 2 -- Number of spaces in tab when editing
 opt.shiftwidth = 2 -- Number of spaces to use for autoindent
 opt.expandtab = true -- Expand tab to spaces so that tabs are spaces
+opt.autoindent = true
+opt.copyindent = true
+opt.breakindent = true
+
 
 -- Set matching pairs of characters and highlight matching brackets
 opt.matchpairs:append {
