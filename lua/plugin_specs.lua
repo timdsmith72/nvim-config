@@ -36,6 +36,12 @@ local plugin_specs = {
       require("config.nvim-cmp")
     end,
   },
+  {
+  "folke/tokyonight.nvim",
+  lazy = false,
+  priority = 1000,
+  opts = {},
+  },
   -- {
   --   "saghen/blink.cmp",
   --   -- optional: provides snippets for the snippet source

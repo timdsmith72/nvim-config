@@ -15,36 +15,36 @@ M.colorscheme_conf = {
     }
     require("onedark").load()
   end,
-  edge = function()
-    vim.g.edge_style = "default"
-    vim.g.edge_enable_italic = 1
-    vim.g.edge_better_performance = 1
+-- edge = function()
+-- vim.g.edge_style = "default"
+-- vim.g.edge_enable_italic = 1
+-- vim.g.edge_better_performance = 1
 
-    use_theme("edge")
-  end,
+-- use_theme("edge")
+-- end,
   sonokai = function()
     vim.g.sonokai_enable_italic = 1
     vim.g.sonokai_better_performance = 1
 
     use_theme("sonokai")
   end,
-  gruvbox_material = function()
+ -- gruvbox_material = function()
     -- foreground option can be material, mix, or original
-    vim.g.gruvbox_material_foreground = "original"
+--    vim.g.gruvbox_material_foreground = "original"
     --background option can be hard, medium, soft
-    vim.g.gruvbox_material_background = "hard"
-    vim.g.gruvbox_material_enable_italic = 1
-    vim.g.gruvbox_material_better_performance = 1
+--    vim.g.gruvbox_material_background = "hard"
+--    vim.g.gruvbox_material_enable_italic = 1
+--    vim.g.gruvbox_material_better_performance = 1
 
-    use_theme("gruvbox-material")
-  end,
-  everforest = function()
-    vim.g.everforest_background = "hard"
-    vim.g.everforest_enable_italic = 1
-    vim.g.everforest_better_performance = 1
+--    use_theme("gruvbox-material")
+--  end,
+--  everforest = function()
+--    vim.g.everforest_background = "hard"
+--    vim.g.everforest_enable_italic = 1
+--    vim.g.everforest_better_performance = 1
 
-    use_theme("everforest")
-  end,
+--    use_theme("everforest")
+--  end,
   nightfox = function()
     use_theme("carbonfox")
   end,
@@ -60,36 +60,36 @@ M.colorscheme_conf = {
   arctic = function()
     use_theme("arctic")
   end,
-  kanagawa = function()
-    use_theme("kanagawa-dragon")
-  end,
+--  kanagawa = function()
+--    use_theme("kanagawa-dragon")
+--  end,
   modus = function()
     use_theme("modus")
   end,
-  jellybeans = function()
-    use_theme("jellybeans")
-  end,
-  github = function()
-    use_theme("github_dark_default")
-  end,
-  ashen = function()
-    use_theme("ashen")
-  end,
-  melange = function()
-    use_theme("melange")
-  end,
+--  jellybeans = function()
+--    use_theme("jellybeans")
+--  end,
+--  github = function()
+--    use_theme("github_dark_default")
+--  end,
+--  ashen = function()
+--    use_theme("ashen")
+--  end,
+--  melange = function()
+--    use_theme("melange")
+--  end,
   makurai = function()
     use_theme("makurai_dark")
   end,
-  vague = function()
-    use_theme("vague")
-  end,
-  kanso = function()
-    use_theme("kanso")
-  end,
-  citruszest = function()
-    use_theme("citruszest")
-  end,
+--  vague = function()
+--    use_theme("vague")
+--  end,
+--  kanso = function()
+--    use_theme("kanso")
+--  end,
+--  citruszest = function()
+--    use_theme("citruszest")
+--  end,
 }
 
 --- Use a random colorscheme from the pre-defined list of colorschemes.
