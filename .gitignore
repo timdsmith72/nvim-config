@@ -6,3 +6,7 @@ en.utf-8.add.spl
 .DS_Store
 lazy-lock.json
 .env*
+package-lock.json
+package.json
+node_modules/*
+
