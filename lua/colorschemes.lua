@@ -15,6 +15,13 @@ M.colorscheme_conf = {
     }
     require("onedark").load()
   end,
+  tokyonight = function()
+    -- Lua
+    require("tokyonight").setup {
+      style = "night",
+    }
+    require("tokyonight").load()
+  end,
 -- edge = function()
 -- vim.g.edge_style = "default"
 -- vim.g.edge_enable_italic = 1
