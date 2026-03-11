@@ -22,6 +22,20 @@ M.colorscheme_conf = {
     }
     require("tokyonight").load()
   end,
+  tokyonight = function()
+    -- Lua
+    require("tokyonight").setup {
+      style = "storm",
+    }
+    require("tokyonight").load()
+  end,
+  tokyonight = function()
+    -- Lua
+    require("tokyonight").setup {
+      style = "moon",
+    }
+    require("tokyonight").load()
+  end,
 -- edge = function()
 -- vim.g.edge_style = "default"
 -- vim.g.edge_enable_italic = 1
