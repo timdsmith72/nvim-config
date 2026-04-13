@@ -29,6 +29,11 @@ opt.timeoutlen = 500
 
 opt.updatetime = 500 -- For CursorHold events
 
+-- Adding cursor visibility
+o.cursorline = true
+o.cursorlineopt = "screenline"
+o.cursorcolumn = true
+
 -- Clipboard settings, always use clipboard for all delete, yank, change, put
 -- operation, see https://stackoverflow.com/q/30691466/6064933
 if fn["provider#clipboard#Executable"]() ~= "" then
