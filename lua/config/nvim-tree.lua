@@ -9,8 +9,7 @@ nvim_tree.setup {
   hijack_unnamed_buffer_when_opening = false,
   open_on_tab = false,
   sort_by = "name",
-  update_cwd = true,
-  sync_root_with_cwd = true,
+  update_cwd = false,
   view = {
     width = 30,
     side = "left",
@@ -38,13 +37,9 @@ nvim_tree.setup {
   },
   update_focused_file = {
     enable = false,
-    update_cwd = true,
+    update_cwd = false,
     ignore_list = {},
   },
-  --system_open = {
-  --  cmd = "",
-  --  args = {},
- -- },
   diagnostics = {
     enable = false,
     show_on_dirs = false,

@@ -3,7 +3,6 @@ local utils = require("utils")
 local fn = vim.fn
 local opt = vim.opt
 local o = vim.o
-local a = vim.api
 
 -- Change fillchars for folding, vertical split, end of buffer, and message separator
 opt.fillchars = {
@@ -16,11 +15,6 @@ opt.fillchars = {
   msgsep = "‾",
   diff = "╱",
 }
-
--- Cursor Visibility
-o.cursorline = true
-o.cursorlineopt = "screenline"
-o.cursorcolumn = true
 
 -- Split window below/right when creating horizontal/vertical windows
 opt.splitbelow = true
@@ -92,10 +86,6 @@ opt.tabstop = 2 -- Number of visual spaces per TAB
 opt.softtabstop = 2 -- Number of spaces in tab when editing
 opt.shiftwidth = 2 -- Number of spaces to use for autoindent
 opt.expandtab = true -- Expand tab to spaces so that tabs are spaces
-opt.autoindent = true
-opt.copyindent = true
-opt.breakindent = true
-
 
 -- Set matching pairs of characters and highlight matching brackets
 opt.matchpairs:append {
@@ -159,6 +149,7 @@ opt.listchars = {
 
 -- Auto-write the file based on some condition
 opt.autowrite = true
+opt.autowriteall = true
 
 -- Auto reload file if changed outside nvim
 opt.autoread = true
@@ -177,8 +168,7 @@ opt.undofile = true
 -- Do not show search match count on bottom right (seriously, I would strain my
 -- neck looking at it). Using plugins like vim-anzu or nvim-hlslens is a better
 -- choice, IMHO.
--- Disable showing intro message (:intro)
-opt.shortmess:append("cSI")
+opt.shortmess:append("cS")
 
 opt.messagesopt = "hit-enter,history:500"
 
@@ -188,9 +178,10 @@ opt.completeopt:remove("preview") -- Disable the preview window
 
 opt.pumheight = 10 -- Maximum number of items to show in popup menu
 opt.pumblend = 5 -- Pseudo transparency for completion menu
+opt.pumborder = "single"
 
 opt.winblend = 0 -- Pseudo transparency for floating window
-opt.winborder = "none"
+opt.winborder = "single"
 
 -- Insert mode key word completion setting
 opt.complete:append("kspell")
@@ -227,10 +218,12 @@ end
 opt.termguicolors = true
 
 -- Set up cursor color and shape in various mode, ref:
--- https://github.com/neovim/neovim/wiki/FAQ#how-to-change-cursor-color-in-the-terminal
-opt.guicursor = "n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor2/lCursor2,r-cr:hor20,o:hor20"
+-- https://neovim.io/doc/user/faq/#_how-to-change-cursor-color-in-the-terminal%3f
+opt.guicursor =
+  "n-v:block-Cursor/lCursor,i-c-ci-ve:ver50-blinkwait50-blinkoff100-blinkon175-Cursor2/lCursor2,r-cr:hor20,o:hor20"
 
 opt.signcolumn = "yes:1"
+opt.colorcolumn = "100"
 
 -- Remove certain character from file name pattern matching
 opt.isfname:remove { "=", "," }
@@ -248,11 +241,7 @@ opt.diffopt = {
 -- inline diff makes changes in a line more noticeable, the author suggests to
 -- remove linematch option if you use inline option, see also
 -- https://www.reddit.com/r/neovim/comments/1myfvla/comment/najy4s3/
-if fn.has("nvim-0.12") == 1 then
-  opt.diffopt:append("inline:char")
-else
-  opt.diffopt:append("linematch:60")
-end
+opt.diffopt:append("inline:char")
 
 opt.wrap = false -- Do not wrap
 opt.ruler = false

@@ -36,12 +36,6 @@ local plugin_specs = {
       require("config.nvim-cmp")
     end,
   },
-  {
-  "folke/tokyonight.nvim",
-  lazy = false,
-  priority = 1000,
-  opts = {},
-  },
   -- {
   --   "saghen/blink.cmp",
   --   -- optional: provides snippets for the snippet source
@@ -58,9 +52,6 @@ local plugin_specs = {
   -- },
   {
     "neovim/nvim-lspconfig",
-    config = function()
-      require("config.lsp")
-    end,
   },
   {
     "dnlhc/glance.nvim",
@@ -97,7 +88,13 @@ local plugin_specs = {
       require("config.treesitter-textobjects")
     end,
   },
-  { "machakann/vim-swap", event = "VeryLazy" },
+  {
+    "mizlan/iswap.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("config.iswap")
+    end,
+  },
 
   -- Super fast buffer jump
   {
@@ -163,6 +160,8 @@ local plugin_specs = {
   { "vague2k/vague.nvim", priority = 1000 },
   { "webhooked/kanso.nvim", priority = 1000 },
   { "zootedb0t/citruszest.nvim", priority = 1000 },
+  { "nyoom-engineering/oxocarbon.nvim", priority = 1000 },
+  { "ember-theme/nvim", name = "ember", priority = 1000 },
 
   -- plugins to provide nerdfont icons
   {
@@ -304,10 +303,7 @@ local plugin_specs = {
         let g:UltiSnipsSnippetDirectories=['UltiSnips', 'my_snippets']
       ]])
     end,
-    dependencies = {
-      "honza/vim-snippets",
-    },
-    event = "InsertEnter",
+    event = "VeryLazy",
   },
 
   -- Automatic insertion and deletion of a pair of characters
@@ -397,14 +393,6 @@ local plugin_specs = {
   -- Better git log display
   { "rbong/vim-flog", cmd = { "Flog" } },
   {
-    "akinsho/git-conflict.nvim",
-    version = "*",
-    event = "VeryLazy",
-    config = function()
-      require("config.git-conflict")
-    end,
-  },
-  {
     "ruifm/gitlinker.nvim",
     event = "User InGitRepo",
     config = function()
@@ -425,6 +413,27 @@ local plugin_specs = {
   {
     "sindrets/diffview.nvim",
     cmd = { "DiffviewOpen" },
+    config = function()
+      require("config.diffview")
+    end,
+  },
+
+  {
+    "barrettruth/diffs.nvim",
+    init = function()
+      vim.g.diffs = {
+        integrations = {
+          fugitive = true,
+          neogit = true,
+          gitsigns = true,
+        },
+      }
+    end,
+  },
+
+  {
+    "esmuellert/codediff.nvim",
+    cmd = "CodeDiff",
   },
 
   {
@@ -715,6 +724,7 @@ local plugin_specs = {
         -- See the configuration section for more details
         -- Load luvit types when the `vim.uv` word is found
         { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        { path = "nvim-lspconfig", words = { "lspconfig" } },
       },
     },
   },
@@ -751,7 +761,11 @@ local plugin_specs = {
     event = "FileType qf",
     ---@module "quicker"
     ---@type quicker.SetupOptions
-    opts = {},
+    opts = {
+      max_filename_width = function()
+        return math.floor(math.min(40, vim.o.columns / 2))
+      end,
+    },
   },
   {
     "nickjvandyke/opencode.nvim",
