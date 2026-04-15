@@ -698,7 +698,7 @@ local plugin_specs = {
     end,
   },
   -- show and trim trailing whitespaces
-  { "jdhao/whitespace.nvim", event = "VeryLazy" },
+  { "nvim-zh/whitespace.nvim", event = "VeryLazy" },
 
   -- file explorer
   {
@@ -796,6 +796,12 @@ local plugin_specs = {
         },
         min_count_to_highlight = 2,
       }
+    end,
+  },
+  {
+    "mfussenegger/nvim-lint",
+    config = function()
+      require("config.nvim-lint")
     end,
   },
 }
