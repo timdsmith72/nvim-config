@@ -39,23 +39,23 @@ M.colorscheme_conf = {
 
     use_theme("sonokai")
   end,
-  gruvbox_material = function()
+  -- gruvbox_material = function()
     -- foreground option can be material, mix, or original
-    vim.g.gruvbox_material_foreground = "original"
+    -- vim.g.gruvbox_material_foreground = "original"
     --background option can be hard, medium, soft
-    vim.g.gruvbox_material_background = "hard"
-    vim.g.gruvbox_material_enable_italic = 1
-    vim.g.gruvbox_material_better_performance = 1
+    --vim.g.gruvbox_material_background = "hard"
+    --vim.g.gruvbox_material_enable_italic = 1
+    --vim.g.gruvbox_material_better_performance = 1
 
-    use_theme("gruvbox-material")
-  end,
-  everforest = function()
-    vim.g.everforest_background = "hard"
-    vim.g.everforest_enable_italic = 1
-    vim.g.everforest_better_performance = 1
-
-    use_theme("everforest")
-  end,
+    --use_theme("gruvbox-material")
+  --end,
+  --everforest = function()
+   -- vim.g.everforest_background = "hard"
+   -- vim.g.everforest_enable_italic = 1
+   -- vim.g.everforest_better_performance = 1
+--
+ --   use_theme("everforest")
+  --end,
   nightfox = function()
     use_theme("carbonfox")
   end,
@@ -71,42 +71,45 @@ M.colorscheme_conf = {
   arctic = function()
     use_theme("arctic")
   end,
+  cyberdream = function()
+    use_theme("cyberdream")
+  end,
   kanagawa = function()
     use_theme("kanagawa-dragon")
   end,
   modus = function()
     use_theme("modus")
   end,
-  jellybeans = function()
-    use_theme("jellybeans")
-  end,
-  github = function()
-    use_theme("github_dark_default")
-  end,
-  ashen = function()
-    use_theme("ashen")
-  end,
-  melange = function()
-    use_theme("melange")
-  end,
+  --jellybeans = function()
+   -- use_theme("jellybeans")
+  --end,
+  --github = function()
+   -- use_theme("github_dark_default")
+  --end,
+  --ashen = function()
+   -- use_theme("ashen")
+  --end,
+  --melange = function()
+   -- use_theme("melange")
+  --end,
   makurai = function()
     use_theme("makurai_dark")
   end,
-  vague = function()
-    use_theme("vague")
-  end,
-  kanso = function()
-    use_theme("kanso")
-  end,
-  citruszest = function()
-    use_theme("citruszest")
-  end,
+  --vague = function()
+   -- use_theme("vague")
+  --end,
+  --kanso = function()
+   -- use_theme("kanso")
+  --end,
+  --citruszest = function()
+   -- use_theme("citruszest")
+  --end,
   oxocarbon = function()
     use_theme("oxocarbon")
   end,
-  ember = function()
-    use_theme("ember")
-  end,
+  --ember = function()
+   -- use_theme("ember")
+  --end,
   lake_dweller = function()
     require("lake-dweller").setup {
       -- "lake-dweller", "pond-dweller", or "ocean-dweller"
@@ -114,9 +117,9 @@ M.colorscheme_conf = {
     }
     use_theme("lake-dweller")
   end,
-  alabaster = function()
-    use_theme("alabaster")
-  end,
+  --alabaster = function()
+   -- use_theme("alabaster")
+  --end,
 }
 
 --- Use a random colorscheme from the pre-defined list of colorschemes.

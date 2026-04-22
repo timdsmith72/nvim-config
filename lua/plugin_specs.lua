@@ -138,8 +138,8 @@ local plugin_specs = {
   { "navarasu/onedark.nvim", lazy = true },
   { "sainnhe/edge", lazy = true },
   { "sainnhe/sonokai", lazy = true },
-  { "sainnhe/gruvbox-material", lazy = true },
-  { "sainnhe/everforest", lazy = true },
+  -- { "sainnhe/gruvbox-material", lazy = true },
+  --{ "sainnhe/everforest", lazy = true },
   { "EdenEast/nightfox.nvim", lazy = true },
   { "catppuccin/nvim", name = "catppuccin", lazy = true },
   { "olimorris/onedarkpro.nvim", lazy = true },
@@ -149,6 +149,11 @@ local plugin_specs = {
     dependencies = { "rktjmp/lush.nvim" },
     name = "arctic",
     branch = "v2",
+  },
+  {
+    "scottmckendry/cyberdream.nvim",
+    lazy = false,
+    priority = 1000,
   },
   -- { "rebelot/kanagawa.nvim", lazy = true },
   { "miikanissi/modus-themes.nvim", priority = 1000 },
@@ -161,9 +166,9 @@ local plugin_specs = {
   -- { "webhooked/kanso.nvim", priority = 1000 },
   -- { "zootedb0t/citruszest.nvim", priority = 1000 },
   { "nyoom-engineering/oxocarbon.nvim", priority = 1000 },
-  { "ember-theme/nvim", name = "ember", priority = 1000 },
+  --{ "ember-theme/nvim", name = "ember", priority = 1000 },
   { "yonatanperel/lake-dweller.nvim", priority = 1000 },
-  { "dchinmay2/alabaster.nvim", priority = 1000 },
+  --{ "dchinmay2/alabaster.nvim", priority = 1000 },
 
   -- plugins to provide nerdfont icons
   {
