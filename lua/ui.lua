@@ -26,13 +26,13 @@ M.colorscheme_conf = {
     }
     require("onedark").load()
   end,
-  edge = function()
-    vim.g.edge_style = "default"
-    vim.g.edge_enable_italic = 1
-    vim.g.edge_better_performance = 1
+  --edge = function()
+   -- vim.g.edge_style = "default"
+    --vim.g.edge_enable_italic = 1
+    --vim.g.edge_better_performance = 1
 
-    use_theme("edge")
-  end,
+    --use_theme("edge")
+  --end,
   sonokai = function()
     vim.g.sonokai_enable_italic = 1
     vim.g.sonokai_better_performance = 1
@@ -56,6 +56,12 @@ M.colorscheme_conf = {
 --
  --   use_theme("everforest")
   --end,
+  catppuccin = function()
+    require("catppuccin").setup {
+      flavour = "mocha", -- latte, frappe, macchiato, mocha, auto
+    }
+    use_theme("catppuccin")
+  end,
   nightfox = function()
     use_theme("carbonfox")
   end,

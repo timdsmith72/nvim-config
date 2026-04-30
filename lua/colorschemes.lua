@@ -66,6 +66,12 @@ M.colorscheme_conf = {
 
 --    use_theme("everforest")
 --  end,
+  catppuccin = function()
+    require("catppuccin").setup {
+      flavour = "mocha", -- latte, frappe, macchiato, mocha, auto
+    }
+    use_theme("catppuccin")
+  end,
   nightfox = function()
     use_theme("carbonfox")
   end,
