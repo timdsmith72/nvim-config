@@ -169,6 +169,7 @@ local plugin_specs = {
   --{ "ember-theme/nvim", name = "ember", priority = 1000 },
   { "yonatanperel/lake-dweller.nvim", priority = 1000 },
   --{ "dchinmay2/alabaster.nvim", priority = 1000 },
+  { "jpwol/thorn.nvim", priority = 1000 },
 
   -- plugins to provide nerdfont icons
   {
@@ -807,24 +808,19 @@ local plugin_specs = {
     "RRethy/vim-illuminate",
     event = "VeryLazy",
     config = function()
-      require("illuminate").configure {
-        filetypes_denylist = {},
-        filetypes_allowlist = {
-          "lua",
-          "python",
-          "sh",
-          "yaml",
-          "json",
-          "toml",
-        },
-        min_count_to_highlight = 2,
-      }
+      require("config.vim-illuminate")
     end,
   },
   {
     "mfussenegger/nvim-lint",
     config = function()
       require("config.nvim-lint")
+    end,
+  },
+  {
+    "xzbdmw/colorful-menu.nvim",
+    config = function()
+      require("config.colorful_menu")
     end,
   },
 }

@@ -179,7 +179,7 @@ api.nvim_create_autocmd("ColorScheme", {
     vim.api.nvim_set_hl(0, "Cursor2", { fg = "None", bg = "yellow", update = true })
 
     -- For floating windows border highlight
-    vim.api.nvim_set_hl(0, "FloatBorder", { fg = "LightGreen", update = true })
+    vim.api.nvim_set_hl(0, "FloatBorder", { bg = "None", fg = "LightGreen", update = true })
 
     -- change the background color of floating window to None, so it blenders better
     vim.api.nvim_set_hl(0, "NormalFloat", { bg = "None", update = true })

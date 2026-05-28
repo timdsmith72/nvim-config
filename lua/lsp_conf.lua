@@ -82,10 +82,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     if client.name == "ruff" then
       client.server_capabilities.hoverProvider = false
     end
-
-    -- Uncomment code below to enable inlay hint from language server, some LSP server supports inlay hint,
-    -- but disable this feature by default, so you may need to enable inlay hint in the LSP server config.
-    -- vim.lsp.inlay_hint.enable(true, {buffer=bufnr})
   end,
   nested = true,
   desc = "Configure buffer keymap and behavior based on LSP",
@@ -105,33 +101,40 @@ vim.lsp.config("*", {
 
 -- A mapping from lsp server name to the executable name
 local enabled_lsp_servers = {
-  pyright = "delance-langserver",
-  ruff = "ruff",
-  lua_ls = "lua-language-server",
-  -- ltex = "ltex-ls",
-  -- clangd = "clangd",
-  vimls = "vim-language-server",
-  bashls = "bash-language-server",
-  yamlls = "yaml-language-server",
-  gopls = "gopls",
-  -- the server can be install via homebrew: brew install golangci-lint-langserver
-  -- golangci-lint also needs to be installed: https://github.com/golangci/golangci-lint
-  golangci_lint_ls = "golangci-lint-langserver",
+  bashls = { exe = "bash-language-server", optional = true },
+
+  -- clangd = { exe = "clangd", optional = true },
 
   -- to install codebook, run `brew install codebook-lsp`
-  -- codebook = "codebook-lsp"
+  -- codebook = { exe = "codebook-lsp", optional = true },
+
+  -- the server can be install via homebrew: brew install golangci-lint-langserver
+  -- golangci-lint also needs to be installed: https://github.com/golangci/golangci-lint
+  golangci_lint_ls = { exe = "golangci-lint-langserver", optional = true },
+  gopls = { exe = "gopls", optional = false },
+
+  lua_ls = { exe = "lua-language-server", optional = false },
+
+  pyright = { exe = "delance-langserver", optional = false },
+  ruff = { exe = "ruff", optional = false },
+
+  vimls = { exe = "vim-language-server", optional = true },
+  yamlls = { exe = "yaml-language-server", optional = true },
 }
 
-for server_name, lsp_executable in pairs(enabled_lsp_servers) do
-  if utils.executable(lsp_executable) then
+for server_name, server_info in pairs(enabled_lsp_servers) do
+  if utils.executable(server_info.exe) then
     vim.lsp.enable(server_name)
   else
-    local msg = string.format(
-      "Executable '%s' for server '%s' not found! Server will not be enabled",
-      lsp_executable,
-      server_name
-    )
-    vim.notify(msg, vim.log.levels.WARN, { title = "Nvim-config" })
+    -- only warn about missing non-optional LSP to avoid noise
+    if not server_info.optional then
+      local msg = string.format(
+        "Executable '%s' for LSP server '%s' not found! LSP Server will not be enabled",
+        server_info.exe,
+        server_name
+      )
+      vim.notify(msg, vim.log.levels.WARN, { title = "Nvim-config" })
+    end
   end
 end
 
@@ -165,5 +168,35 @@ vim.api.nvim_create_autocmd("LspProgress", {
       status = value.kind ~= "end" and "running" or "success",
       percent = value.percentage,
     })
+  end,
+})
+
+-- this controls the LSP inlayHints behavior
+vim.g.lsp_inlay_hint_enabled = false
+
+local update_inlayhint = function(enable)
+  -- Some LSP server supports inlay hint, but disable this feature by default, so you may need to
+  -- enable inlay hint in the LSP server config.
+  vim.lsp.inlay_hint.enable(enable)
+end
+
+vim.api.nvim_create_user_command("LspInlayHints", function(context)
+  -- vim.print("context", context)
+  if context["args"] == "enable" then
+    vim.g.lsp_inlay_hint_enabled = true
+  end
+
+  if context["args"] == "disable" then
+    vim.g.lsp_inlay_hint_enabled = false
+  end
+
+  update_inlayhint(vim.g.lsp_inlay_hint_enabled)
+end, {
+  bang = false,
+  nargs = 1,
+  force = true,
+  desc = "Toggle LSP inlayHints",
+  complete = function()
+    return { "enable", "disable" }
   end,
 })
