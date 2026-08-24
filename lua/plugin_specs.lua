@@ -20,8 +20,10 @@ local firenvim_not_active = function()
   return not vim.g.started_by_firenvim
 end
 
-local plugin_specs = {
-  -- auto-completion engine
+--- can be `blink` or `nvim-cmp`
+local completion_engine = "blink"
+
+local cmp_plugin_specs = {
   { "hrsh7th/cmp-nvim-lsp", lazy = true },
   { "hrsh7th/cmp-path", lazy = true },
   { "hrsh7th/cmp-buffer", lazy = true },
@@ -36,20 +38,36 @@ local plugin_specs = {
       require("config.nvim-cmp")
     end,
   },
-  -- {
-  --   "saghen/blink.cmp",
-  --   -- optional: provides snippets for the snippet source
-  --   dependencies = {
-  --     "rafamadriz/friendly-snippets",
-  --     "archie-judd/blink-cmp-words",
-  --   },
-  --   -- use a release tag to download pre-built binaries
-  --   version = "1.*",
-  --   config = function()
-  --     require("config.blink-cmp")
-  --   end,
-  --   opts_extend = { "sources.default" },
-  -- },
+}
+
+local blink_plugin_specs = {
+  { "quangnguyen30192/cmp-nvim-ultisnips" },
+  {
+    "saghen/blink.compat",
+    -- use v2.* for blink.cmp v1.*
+    version = "2.*",
+    -- lazy.nvim will automatically load the plugin when it's required by blink.cmp
+    lazy = true,
+    -- make sure to set opts so that lazy.nvim calls blink.compat's setup
+    opts = {},
+  },
+  { "archie-judd/blink-cmp-words", lazy = true },
+  {
+    "saghen/blink.cmp",
+    -- optional: provides snippets for the snippet source
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+    },
+    -- use a release tag to download pre-built binaries
+    version = "1.*",
+    config = function()
+      require("config.blink-cmp")
+    end,
+    opts_extend = { "sources.default" },
+  },
+}
+
+local plugin_specs = {
   {
     "neovim/nvim-lspconfig",
   },
@@ -805,6 +823,14 @@ local plugin_specs = {
     end,
   },
 }
+
+if completion_engine == "nvim-cmp" then
+  vim.list_extend(plugin_specs, cmp_plugin_specs)
+elseif completion_engine == "blink" then
+  vim.list_extend(plugin_specs, blink_plugin_specs)
+else
+  vim.print(string.format("Unknown completion engine: %s!", completion_engine))
+end
 
 require("lazy").setup {
   spec = plugin_specs,

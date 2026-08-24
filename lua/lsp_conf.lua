@@ -63,8 +63,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "K", function()
       vim.lsp.buf.hover {
         border = "single",
-        max_height = 20,
-        max_width = 130,
+        max_height = 40,
+        max_width = 100,
         close_events = { "CursorMoved", "BufLeave", "WinLeave", "LSPDetach" },
       }
     end)
@@ -110,18 +110,21 @@ local enabled_lsp_servers = {
 
   -- the server can be install via homebrew: brew install golangci-lint-langserver
   -- golangci-lint also needs to be installed: https://github.com/golangci/golangci-lint
+  gopls = { exe = "gopls", optional = false },
   golangci_lint_ls = { exe = "golangci-lint-langserver", optional = true },
-  gopls = { exe = "gopls", optional = true },
 
   lua_ls = { exe = "lua-language-server", optional = false },
 
+  -- python related LSP
   pyright = { exe = "delance-langserver", optional = false },
   pyrefly = { exe = "pyrefly", optional = true },
   ty = { exe = "ty", optional = true },
-  ruff = { exe = "ruff", optional = false },
+  ruff = { exe = "ruff", optional = true },
 
   vimls = { exe = "vim-language-server", optional = true },
   yamlls = { exe = "yaml-language-server", optional = true },
+
+  -- spelling/typo check
   typos_lsp = { exe = "typos-lsp", optional = true },
 }
 
