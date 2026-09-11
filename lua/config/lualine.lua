@@ -212,8 +212,8 @@ require("lualine").setup {
   options = {
     icons_enabled = true,
     theme = "auto",
-    component_separators = { left = "|", right = "|" },
-    section_separators = "",
+    component_separators = { left = "", right = "" },
+    section_separators = { left = "", right = "" },
     disabled_filetypes = {},
     always_divide_middle = true,
     refresh = {
@@ -225,13 +225,14 @@ require("lualine").setup {
       {
         "filename",
         symbols = {
-          readonly = "[🔒]",
+          readonly = "󰈡",
         },
       },
     },
     lualine_b = {
       {
         "branch",
+        icon = "",
         fmt = function(name, _)
           -- truncate branch name in case the name is too long
           return string.sub(name, 1, 20)
@@ -240,15 +241,17 @@ require("lualine").setup {
       },
       {
         get_git_ahead_behind_info,
-        color = { fg = "#E0C479" },
       },
       {
         "diff",
         source = diff,
+        color = { gui = "bold" },
       },
       {
-        virtual_env,
-        color = { fg = "black", bg = "#F1CA81" },
+        "diagnostics",
+        sources = { "nvim_diagnostic" },
+        symbols = { error = "🆇 ", warn = "⚠️ ", info = "ℹ️ ", hint = " " },
+        color = { gui = "bold" },
       },
     },
     lualine_c = {
@@ -268,12 +271,7 @@ require("lualine").setup {
     lualine_x = {
       {
         get_active_lsp,
-        icon = "📡",
-      },
-      {
-        "diagnostics",
-        sources = { "nvim_diagnostic" },
-        symbols = { error = "🆇 ", warn = "⚠️ ", info = "ℹ️ ", hint = " " },
+        icon = "",
       },
       {
         trailing_space,
@@ -295,6 +293,10 @@ require("lualine").setup {
     },
     lualine_z = {
       "progress",
+      {
+        virtual_env,
+        color = { fg = "black", bg = "#F1CA81" },
+      },
     },
   },
   inactive_sections = {

@@ -203,7 +203,6 @@ local plugin_specs = {
 
   {
     "nvim-lualine/lualine.nvim",
-    event = "BufRead",
     cond = firenvim_not_active,
     config = function()
       require("config.lualine")
@@ -820,6 +819,14 @@ local plugin_specs = {
     "xzbdmw/colorful-menu.nvim",
     config = function()
       require("config.colorful_menu")
+    end,
+  },
+  {
+    "Wansmer/treesj",
+    event = "VeryLazy",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("config.treesj")
     end,
   },
 }
