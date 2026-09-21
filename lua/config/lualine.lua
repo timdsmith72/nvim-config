@@ -44,7 +44,7 @@ local async_git_status_update = function()
   end
 
   -- Get the number of commits behind
-  -- the @{upstream} notation is inspired by post: https://www.reddit.com/r/neovim/comments/t48x5i/git_branch_aheadbehind_info_status_line_component/
+  -- the @{upstream} notation is inspired by post: https://www.reddit.com/r/neovim/s/OWNFzqE7nO
   -- note that here we should use double dots instead of triple dots
   local behind_cmd_str = "git rev-list --count HEAD..@{upstream}"
   async_cmd(behind_cmd_str, handle_numeric_result("behind_count"))
@@ -129,6 +129,18 @@ local function trailing_space()
   return msg
 end
 
+local function show_encoding()
+  local fileencoding = vim.api.nvim_get_option_value("fileencoding", { buf = 0 })
+  -- normalize the format
+  fileencoding = string.upper(fileencoding)
+
+  if fileencoding ~= "UTF-8" then
+    return fileencoding
+  else
+    return ""
+  end
+end
+
 local function mixed_indent()
   if not vim.o.modifiable then
     return ""
@@ -184,6 +196,12 @@ local virtual_env = function()
   end
 end
 
+local main_lsp_by_filetype = {
+  python = "pyright",
+  go = "gopls",
+  lua = "lua_ls",
+}
+
 local get_active_lsp = function()
   local msg = "🚫"
   local clients = vim.lsp.get_clients { bufnr = 0 }
@@ -191,11 +209,14 @@ local get_active_lsp = function()
     return msg
   end
 
-  local client_names = {}
+  local client_names_unordered = {}
   for _, client in ipairs(clients) do
     local client_name = client.name
-    table.insert(client_names, client_name)
+    table.insert(client_names_unordered, client_name)
   end
+
+  local main_lsp = main_lsp_by_filetype[vim.bo.filetype]
+  local client_names = utils.reorder_list_element(client_names_unordered, main_lsp)
 
   local cnt = #client_names
   local lsp_infos = nil
@@ -212,7 +233,7 @@ require("lualine").setup {
   options = {
     icons_enabled = true,
     theme = "auto",
-    component_separators = { left = "", right = "" },
+    component_separators = { left = "\\", right = "/" },
     section_separators = { left = "", right = "" },
     disabled_filetypes = {},
     always_divide_middle = true,
@@ -244,8 +265,8 @@ require("lualine").setup {
       },
       {
         "diff",
+        symbols = { added = "+", modified = "~", removed = "-" },
         source = diff,
-        color = { gui = "bold" },
       },
       {
         "diagnostics",
@@ -284,8 +305,8 @@ require("lualine").setup {
     },
     lualine_y = {
       {
-        "encoding",
-        fmt = string.upper,
+        show_encoding,
+        color = "ErrorMsg",
       },
       {
         "fileformat",
