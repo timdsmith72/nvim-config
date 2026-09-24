@@ -448,7 +448,7 @@ local plugin_specs = {
   },
 
   {
-    "barrettruth/diffs.nvim",
+    "https://forge.barrettruth.com/barrettruth/diffs.nvim",
     init = function()
       vim.g.diffs = {
         integrations = {
