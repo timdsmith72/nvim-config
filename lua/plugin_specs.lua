@@ -1,4 +1,5 @@
 local utils = require("utils")
+local symbol_icon = require("symbol_icon")
 
 local plugin_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy")
 local lazypath = vim.fs.joinpath(plugin_dir, "lazy.nvim")
@@ -227,7 +228,7 @@ local plugin_specs = {
         draw = {
           animation = mini_indent.gen_animation.none(),
         },
-        symbol = "▏",
+        symbol = symbol_icon.indent,
       }
     end,
   },
@@ -435,7 +436,7 @@ local plugin_specs = {
     config = function()
       require("config.gitsigns")
     end,
-    event = "BufRead",
+    event = "VeryLazy",
     version = "*",
   },
 
@@ -732,7 +733,7 @@ local plugin_specs = {
   -- file explorer
   {
     "nvim-tree/nvim-tree.lua",
-    keys = { "<space>s" },
+    event = "VeryLazy",
     config = function()
       require("config.nvim-tree")
     end,
@@ -829,6 +830,16 @@ local plugin_specs = {
       require("config.treesj")
     end,
   },
+  {
+    "MunifTanjim/nui.nvim",
+    event = "VeryLazy",
+  },
+  {
+    "tadaa/vimade",
+    config = function()
+      require("config.vimade")
+    end,
+  },
 }
 
 if completion_engine == "nvim-cmp" then
@@ -841,6 +852,7 @@ end
 
 require("lazy").setup {
   spec = plugin_specs,
+  concurrency = 5,
   ui = {
     border = "rounded",
     title = "Plugin Manager",
