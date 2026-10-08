@@ -111,7 +111,7 @@ api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
 
 -- Do not use smart case in command line mode, extracted from https://vi.stackexchange.com/a/16511/15292.
 api.nvim_create_augroup("dynamic_smartcase", { clear = true })
-api.nvim_create_autocmd("CmdLineEnter", {
+api.nvim_create_autocmd("CmdlineEnter", {
   group = "dynamic_smartcase",
   pattern = ":",
   callback = function()
@@ -119,7 +119,7 @@ api.nvim_create_autocmd("CmdLineEnter", {
   end,
 })
 
-api.nvim_create_autocmd("CmdLineLeave", {
+api.nvim_create_autocmd("CmdlineLeave", {
   group = "dynamic_smartcase",
   pattern = ":",
   callback = function()
@@ -242,10 +242,12 @@ api.nvim_create_autocmd("BufReadPre", {
   pattern = "*",
   desc = "optimize for large file",
   callback = function(ev)
-    local file_size_limit = 524288 -- 0.5MB
-    local f = ev.file
+    local file_size_limit = 4.0 -- unit in MB
+    local fpath = ev.file
 
-    if fn.getfsize(f) > file_size_limit or fn.getfsize(f) == -2 then
+    local filesize = utils.filesize(fpath)
+
+    if filesize and filesize / (1024 * 1024) > file_size_limit then
       vim.o.eventignore = "all"
 
       -- show ruler

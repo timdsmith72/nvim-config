@@ -164,6 +164,23 @@ function M.get_py_env()
   return ""
 end
 
+--- Get python command to run
+--- @return string | nil
+function M.get_py_cmd()
+  local py_cmd = nil
+
+  local py_env = M.get_py_env()
+  if py_env == "uv" then
+    py_cmd = "uv run python"
+  elseif M.executable("python") then
+    py_cmd = "python"
+  elseif M.executable("python3") then
+    py_cmd = "python3"
+  end
+
+  return py_cmd
+end
+
 ---@param buf integer buf number
 ---@return boolean
 function M.buf_writable(buf)
@@ -232,6 +249,38 @@ function M.get_git_branches()
     ["local"] = M._get_branch(true),
     remote = M._get_branch(false),
   }
+end
+
+--- Throttle a function run
+--- @param callback function
+--- @param delay_ms integer delay in milliseconds
+function M.throttle(callback, delay_ms)
+  --- @type integer
+  local start
+
+  return function(...)
+    local now = vim.uv.hrtime()
+
+    if start and (now - start) / 1e6 < delay_ms then
+      return
+    end
+
+    callback(...)
+    start = now
+  end
+end
+
+--- Get the file size in bytes
+--- @param fpath string the file path
+--- @return integer|nil # The file size in bytes, or nil if error happens or file does not exist
+function M.filesize(fpath)
+  local stat, _, _ = vim.uv.fs_stat(fpath)
+
+  if stat then
+    return stat.size
+  end
+
+  return nil
 end
 
 return M

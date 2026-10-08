@@ -3,6 +3,13 @@ local lsp_utils = require("lsp_utils")
 local symbol_icon = require("symbol_icon")
 local fn = vim.fn
 
+-- the timeout for running git related command
+local GIT_CMD_TIMEOUT_FETCH = 5000
+local GIT_CMD_TIMEOUT_OTHER = 200
+local GIT_STATUS_UPDATE_THROTTLE_DELAY = 1000 * 3
+
+local BRANCH_MAX_LEN = 30
+
 local function show_fileformat()
   local fileformat = vim.api.nvim_get_option_value("fileformat", { buf = 0 })
 
@@ -21,69 +28,82 @@ local git_status_cache = {
   ahead_count = 0,
 }
 
-local on_exit_fetch = function(result)
-  if result.code == 0 then
-    git_status_cache.fetch_success = true
-  end
-end
-
-local function handle_numeric_result(cache_key)
-  return function(result)
-    if result.code == 0 then
-      git_status_cache[cache_key] = tonumber(result.stdout:match("(%d+)")) or 0
-    else
-      -- when the git command fails, it usually means there are some changes in your branch. For example, you
-      -- on branchA, for this one, you have upstream branch. Then you changed to branchB, and there is no upstream
-      -- branch, the git rev-list command will error out. In this case, we should clear the cache
-      -- vim.print("Error running git command", result)
-      git_status_cache[cache_key] = 0
-    end
-  end
-end
-
-local async_cmd = function(cmd_str, on_exit)
+--- @param cmd_str string the command to run
+--- @param timeout integer timeout for running command, in milliseconds
+--- @param on_exit function callback function to run when finishing the command
+local async_cmd = function(cmd_str, timeout, on_exit)
   local cmd = vim.tbl_filter(function(element)
     return element ~= ""
   end, vim.split(cmd_str, " "))
 
-  vim.system(cmd, { text = true }, on_exit)
+  vim.system(cmd, { text = true, timeout = timeout }, on_exit)
+end
+
+--- @param result vim.SystemCompleted
+local function update_ahead_behind_info(result)
+  if result.code == 0 then
+    local ahead, behind = result.stdout:match("^(%d+)%s+(%d+)%s*$")
+
+    ahead = tonumber(ahead) or 0
+    behind = tonumber(behind) or 0
+
+    git_status_cache.ahead_count = ahead
+    git_status_cache.behind_count = behind
+  else
+    -- when the git command fails, it usually means there are some changes in your branch. For example, you
+    -- on branchA, for this one, you have upstream branch. Then you changed to branchB, and there is no upstream
+    -- branch, the git rev-list command will error out. In this case, we should clear the cache
+    -- vim.print("Error running git command", result)
+    git_status_cache.ahead_count = 0
+    git_status_cache.behind_count = 0
+  end
+end
+
+--- @param result vim.SystemCompleted
+local on_exit_fetch = function(result)
+  if result.code == 0 then
+    git_status_cache.fetch_success = true
+  end
+
+  if git_status_cache.fetch_success then
+    -- Get the number of commits ahead and behind
+    -- the @{upstream} notation is inspired by post: https://www.reddit.com/r/neovim/s/OWNFzqE7nO
+
+    -- this shows the ahead and behind info in one line in this format: `<ahead><tab><behin>`
+    local ahead_behind_cmd = "git rev-list --left-right --count HEAD...@{upstream}"
+    async_cmd(ahead_behind_cmd, GIT_CMD_TIMEOUT_OTHER, update_ahead_behind_info)
+  end
 end
 
 local async_git_status_update = function()
   -- Fetch the latest changes from the remote repository (replace 'origin' if needed)
-  async_cmd("git fetch origin", on_exit_fetch)
+  async_cmd("git fetch origin", GIT_CMD_TIMEOUT_FETCH, on_exit_fetch)
+
   if not git_status_cache.fetch_success then
     return
   end
-
-  -- Get the number of commits behind
-  -- the @{upstream} notation is inspired by post: https://www.reddit.com/r/neovim/s/OWNFzqE7nO
-  -- note that here we should use double dots instead of triple dots
-  local behind_cmd_str = "git rev-list --count HEAD..@{upstream}"
-  async_cmd(behind_cmd_str, handle_numeric_result("behind_count"))
-
-  -- Get the number of commits ahead
-  local ahead_cmd_str = "git rev-list --count @{upstream}..HEAD"
-  async_cmd(ahead_cmd_str, handle_numeric_result("ahead_count"))
 end
 
+-- slow down the pace of calling git update, this is an expensive operation
+local throttled_git_update =
+  utils.throttle(async_git_status_update, GIT_STATUS_UPDATE_THROTTLE_DELAY)
+
 local function get_git_ahead_behind_info()
-  async_git_status_update()
+  throttled_git_update()
 
   local status = git_status_cache
-  if not status then
-    return ""
-  end
 
   local msg = ""
 
-  if type(status.ahead_count) == "number" and status.ahead_count > 0 then
-    local ahead_str = string.format("%s[%d] ", symbol_icon.git.commit.ahead, status.ahead_count)
+  local ahead_cnt = status.ahead_count
+  if ahead_cnt > 0 then
+    local ahead_str = string.format("%s[%d] ", symbol_icon.git.commit.ahead, ahead_cnt)
     msg = msg .. ahead_str
   end
 
-  if type(status.behind_count) == "number" and status.behind_count > 0 then
-    local behind_str = string.format("%s[%d] ", symbol_icon.git.commit.behind, status.behind_count)
+  local behind_cnt = status.behind_count
+  if behind_cnt > 0 then
+    local behind_str = string.format("%s[%d] ", symbol_icon.git.commit.behind, behind_cnt)
     msg = msg .. behind_str
   end
 
@@ -368,6 +388,7 @@ require("lualine").setup {
     disabled_filetypes = {},
     always_divide_middle = false,
     refresh = {
+      -- refresh statusline every 1000 milliseconds
       statusline = 1000,
     },
   },
@@ -386,7 +407,7 @@ require("lualine").setup {
         icon = symbol_icon.git.branch,
         fmt = function(name, _)
           -- truncate branch name in case the name is too long
-          return string.sub(name, 1, 20)
+          return string.sub(name, 1, BRANCH_MAX_LEN)
         end,
         color = { gui = "italic,bold" },
         on_click = show_branch_menu,
