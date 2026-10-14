@@ -49,6 +49,13 @@ end, {
   desc = "Delete other buffers",
 })
 
+keymap.set('n', '<leader>ci', function()
+  vim.lsp.buf.code_action({
+    context = { only = { 'source.organizeImports' } },
+    apply = true,
+  })
+end, { desc = 'Ruff: Organize Imports' })
+
 keymap.set("n", [[\dt]], "<cmd>tabclose<CR>", {
   silent = true,
   desc = "Delete current tab",
