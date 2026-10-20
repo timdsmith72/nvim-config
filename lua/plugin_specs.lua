@@ -155,10 +155,10 @@ local plugin_specs = {
   },
   -- A list of colorscheme plugin you may want to try. Find what suits you.
   { "navarasu/onedark.nvim", lazy = true },
-  --{ "sainnhe/edge", lazy = true },
+  { "sainnhe/edge", lazy = true },
   { "sainnhe/sonokai", lazy = true },
-  -- { "sainnhe/gruvbox-material", lazy = true },
-  --{ "sainnhe/everforest", lazy = true },
+  { "sainnhe/gruvbox-material", lazy = true },
+  { "sainnhe/everforest", lazy = true },
   { "EdenEast/nightfox.nvim", lazy = true },
   { "catppuccin/nvim", name = "catppuccin", lazy = true },
   { "olimorris/onedarkpro.nvim", lazy = true },
@@ -169,27 +169,21 @@ local plugin_specs = {
     name = "arctic",
     branch = "v2",
   },
-  {
-    "scottmckendry/cyberdream.nvim",
-    lazy = false,
-    priority = 1000,
-  },
-  -- { "rebelot/kanagawa.nvim", lazy = true },
+  { "rebelot/kanagawa.nvim", lazy = true },
   { "miikanissi/modus-themes.nvim", priority = 1000 },
- -- { "wtfox/jellybeans.nvim", priority = 1000 },
-  -- { "projekt0n/github-nvim-theme", name = "github-theme" },
-  -- { "ficcdaf/ashen.nvim", priority = 1000 },
-  -- { "savq/melange-nvim", priority = 1000 },
+  { "wtfox/jellybeans.nvim", priority = 1000 },
+  { "projekt0n/github-nvim-theme", name = "github-theme" },
+  { "ficcdaf/ashen.nvim", priority = 1000 },
+  { "savq/melange-nvim", priority = 1000 },
   { "Skardyy/makurai-nvim", priority = 1000 },
---   { "vague2k/vague.nvim", priority = 1000 },
-  -- { "webhooked/kanso.nvim", priority = 1000 },
-  -- { "zootedb0t/citruszest.nvim", priority = 1000 },
-  { "nyoom-engineering/oxocarbon.nvim", priority = 1000 },
-  --{ "ember-theme/nvim", name = "ember", priority = 1000 },
+  { "vague2k/vague.nvim", priority = 1000 },
+  { "webhooked/kanso.nvim", priority = 1000 },
+  { "zootedb0t/citruszest.nvim", priority = 1000 },
+  { "ember-theme/nvim", name = "ember", priority = 1000 },
   { "yonatanperel/lake-dweller.nvim", priority = 1000 },
-  --{ "dchinmay2/alabaster.nvim", priority = 1000 },
+  { "dchinmay2/alabaster.nvim", priority = 1000 },
   { "jpwol/thorn.nvim", priority = 1000 },
-  { "VerticalHeretic/AzulejoBrutalism", priority = 1000 },
+  { "https://codeberg.org/navahas/sanzo.nvim", priority = 1000 },
 
   -- plugins to provide nerdfont icons
   {
@@ -255,22 +249,6 @@ local plugin_specs = {
       require("config.nvim_ufo")
     end,
   },
-  -- File Explorer
-  {
-    'stevearc/oil.nvim',
-    ---@module 'oil'
-    ---@type oil.SetupOpts
-    opts = {},
-    -- Optional dependencies
-    dependencies = { { "nvim-mini/mini.icons", opts = {} } },
-    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
-    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
-    lazy = false,
-    config = function()
-      require("config.oil")
-    end,
-  },
-
   -- Highlight URLs inside vim
   { "itchyny/vim-highlighturl", event = "BufReadPost" },
 
