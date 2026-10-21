@@ -78,6 +78,9 @@ M.colorscheme_conf = {
   arctic = function()
     use_theme("arctic")
   end,
+  cyberdream = function()
+    use_theme("cyberdream")
+  end,
   kanagawa = function()
     use_theme("kanagawa-dragon")
   end,

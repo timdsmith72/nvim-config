@@ -169,6 +169,11 @@ local plugin_specs = {
     name = "arctic",
     branch = "v2",
   },
+  {
+    "scottmckendry/cyberdream.nvim",
+    lazy = false,
+    priority = 1000,
+  },
   { "rebelot/kanagawa.nvim", lazy = true },
   { "miikanissi/modus-themes.nvim", priority = 1000 },
   { "wtfox/jellybeans.nvim", priority = 1000 },
