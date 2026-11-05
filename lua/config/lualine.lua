@@ -6,7 +6,7 @@ local fn = vim.fn
 -- the timeout for running git related command
 local GIT_CMD_TIMEOUT_FETCH = 5000
 local GIT_CMD_TIMEOUT_OTHER = 200
-local GIT_STATUS_UPDATE_THROTTLE_DELAY = 1000 * 3
+local GIT_STATUS_UPDATE_THROTTLE_DELAY = 1000 * 2
 
 local BRANCH_MAX_LEN = 30
 
@@ -53,7 +53,8 @@ local function update_ahead_behind_info(result)
     -- when the git command fails, it usually means there are some changes in your branch. For example, you
     -- on branchA, for this one, you have upstream branch. Then you changed to branchB, and there is no upstream
     -- branch, the git rev-list command will error out. In this case, we should clear the cache
-    -- vim.print("Error running git command", result)
+    -- local msg = string.format("Error running git command: %s", vim.inspect(result))
+    -- vim._log(msg, vim.log.levels.DEBUG)
     git_status_cache.ahead_count = 0
     git_status_cache.behind_count = 0
   end
@@ -210,17 +211,25 @@ local function mixed_indent()
 end
 
 local diff = function()
-  local git_status = vim.b.gitsigns_status_dict
-  if git_status == nil then
-    return
+  local modify_num, remove_num, add_num = 0, 0, 0
+
+  if vim.b.gitsigns_status_dict ~= nil then
+    local git_status = vim.b.gitsigns_status_dict
+    modify_num = git_status.changed
+    remove_num = git_status.removed
+    add_num = git_status.added
   end
 
-  local modify_num = git_status.changed
-  local remove_num = git_status.removed
-  local add_num = git_status.added
+  if vim.b.minidiff_summary ~= nil then
+    local git_status = vim.b.minidiff_summary
+
+    modify_num = git_status.change
+    remove_num = git_status.delete
+    add_num = git_status.add
+  end
 
   local info = { added = add_num, modified = modify_num, removed = remove_num }
-  -- vim.print(info)
+  -- vim._log(info, vim.log.levels.DEBUG)
   return info
 end
 
@@ -348,8 +357,8 @@ local show_branch_menu = function()
 
       local r = vim.system(cmd, { text = true }):wait()
       if r.code ~= 0 then
-        vim._log("failed to switch branch:")
-        vim._log(r.stderr)
+        vim._log("failed to switch branch:", vim.log.levels.WARN)
+        vim._log(r.stderr, vim.log.levels.WARN)
       end
     end,
   }
